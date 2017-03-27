@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.nav-logo {
+    width: 150px !important;
+}
+
+.table-tr a {
+    color: #333333;
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}

@@ -138,6 +138,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Content\Functions.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Functions.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\CarsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlanningsController.cs" />
@@ -157,6 +162,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -220,6 +226,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Content\Functions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Functions.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resource</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703261242557_Initial.resx">
       <DependentUpon>201703261242557_Initial.cs</DependentUpon>
     </EmbeddedResource>
