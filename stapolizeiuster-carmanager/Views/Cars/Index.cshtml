@@ -4,10 +4,12 @@
     ViewBag.Title = "Fahrzueg Übersicht";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Fahrzeug hinzufügen", "Create")
+    <a href="@Url.Action("Create", "Cars")">
+        <i class="fa fa-plus" aria-hidden="true"></i> Fahrzeug hinzufügen
+    </a>
 </p>
 <table class="table table-hover">
     <thead>
@@ -18,7 +20,7 @@
             <th>
                 Funk
             </th>
-            <th></th>
+            <th class="text-right">Aktionen</th>
     </thead>
     <tbody>
 
@@ -35,7 +37,7 @@
                         @Html.DisplayFor(modelItem => item.Radio)
                     </a>
                 </td>
-                <td class="text-right">
+                <td class="text-right table-action-links">
                     <a href="@Url.Action("Edit", "Cars", new { id = item.Id })">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a> |

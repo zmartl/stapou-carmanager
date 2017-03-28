@@ -12,3 +12,11 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.table-action-links a:link {
+    text-decoration: none;
+}
+
+/*.table-action-links a i {
+    color: #E62B27;
+}*/
