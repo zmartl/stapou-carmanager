@@ -61,11 +61,29 @@ namespace Resource {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aktionen ähnelt.
+        /// </summary>
+        public static string actions {
+            get {
+                return ResourceManager.GetString("actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Wollen Sie diesen Datensatz wirklich löschen? ähnelt.
         /// </summary>
         public static string confirm_delete {
             get {
                 return ResourceManager.GetString("confirm_delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ähnelt.
+        /// </summary>
+        public static string save {
+            get {
+                return ResourceManager.GetString("save", resourceCulture);
             }
         }
     }

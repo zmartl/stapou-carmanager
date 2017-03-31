@@ -38,6 +38,8 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Create
         public ActionResult Create()
         {
+            ViewBag.Cars = new SelectList(db.Cars, "Id", "Description");
+            ViewBag.States = new SelectList(db.States, "Id", "Name");
             return View();
         }
 

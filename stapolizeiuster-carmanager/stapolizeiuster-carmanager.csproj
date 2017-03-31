@@ -191,6 +191,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="stadtuster.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -207,17 +208,14 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Cars\Create.cshtml" />
     <Content Include="Views\Cars\Delete.cshtml" />
-    <Content Include="Views\Cars\Details.cshtml" />
     <Content Include="Views\Cars\Edit.cshtml" />
     <Content Include="Views\Cars\Index.cshtml" />
     <Content Include="Views\States\Create.cshtml" />
     <Content Include="Views\States\Delete.cshtml" />
-    <Content Include="Views\States\Details.cshtml" />
     <Content Include="Views\States\Edit.cshtml" />
     <Content Include="Views\States\Index.cshtml" />
     <Content Include="Views\Plannings\Create.cshtml" />
     <Content Include="Views\Plannings\Delete.cshtml" />
-    <Content Include="Views\Plannings\Details.cshtml" />
     <Content Include="Views\Plannings\Edit.cshtml" />
     <Content Include="Views\Plannings\Index.cshtml" />
   </ItemGroup>

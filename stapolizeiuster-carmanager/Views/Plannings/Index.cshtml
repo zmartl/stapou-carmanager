@@ -1,29 +1,46 @@
 ﻿@model IEnumerable<stapolizeiuster_carmanager.Models.Planning>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Planungs Übersicht";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a href="@Url.Action("Create", "Plannings")">
+        <i class="fa fa-plus" aria-hidden="true"></i> Planung hinzufügen
+    </a>
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.StartTime)
+            Fahrzeug
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndTime)
+            Anfang
+        </th>
+        <th>
+            Ende
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
+        <td class="table-tr">
+            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                @Html.DisplayFor(modelItem => item.Car.Description, item.Car.Description + " - " + item.Car.Radio)
+            </a>
+        </td>
+        <td class="table-tr">
+            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </a>
+        </td>
+        <td class="table-tr">
+            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.EndTime)
