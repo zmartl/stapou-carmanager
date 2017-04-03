@@ -9,8 +9,10 @@
     @Styles.Render("~/Content/bootstrap.min.css")
     @Styles.Render("~/Content/bootstrap-datetimepicker.min.css")
     @Styles.Render("~/Content/font-awesome.min.css")
+    @Styles.Render("~/Content/sweetalert2.min.css")
+    @Styles.Render("~/Content/toastr.css")
     @Styles.Render("~/Content/app.css")
-    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/bundles/modernizr")
 
 </head>
 <body>
@@ -54,19 +56,22 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("/Scripts/moment-with-locales.min.js")
     @Scripts.Render("/Scripts/bootstrap-datetimepicker.min.js")
+    @Scripts.Render("/Scripts/sweetalert2.min.js")
+    @Scripts.Render("/Scripts/toastr.min.js")
+    @Scripts.Render("/Scripts/messageHelper.js")
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker({
-                    locale: 'de'
-                });
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                locale: 'de'
             });
-            $(function () {
-                $('#datetimepicker2').datetimepicker({
-                    locale: 'de'
-                });
+        });
+        $(function () {
+            $('#datetimepicker2').datetimepicker({
+                locale: 'de'
             });
+        });
     </script>
 </body>
 </html>

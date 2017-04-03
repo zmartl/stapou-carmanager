@@ -52,7 +52,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.States.Add(state);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "createSuccess" });
             }
 
             return View(state);
@@ -84,7 +84,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Entry(state).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "editSuccess" });
             }
             return View(state);
         }
@@ -109,10 +109,15 @@ namespace stapolizeiuster_carmanager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if(db.Plannings.Any(x => x.State.Id == id))
+            {
+                return RedirectToAction("Index", new { message = "deleteConflict" });
+            }
+
             State state = db.States.Find(id);
             db.States.Remove(state);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = "deleteSuccess" });
         }
 
         protected override void Dispose(bool disposing)

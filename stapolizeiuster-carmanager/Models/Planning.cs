@@ -7,7 +7,7 @@ namespace stapolizeiuster_carmanager.Models
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public Car Car { get; set; }
-        public State State { get; set; }
+        public virtual Car Car { get; set; }
+        public virtual State State { get; set; }
     }
 }

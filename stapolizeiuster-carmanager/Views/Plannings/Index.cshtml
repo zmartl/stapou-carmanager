@@ -17,6 +17,9 @@
             Fahrzeug
         </th>
         <th>
+            Status
+        </th>
+        <th>
             Anfang
         </th>
         <th>
@@ -30,6 +33,11 @@
         <td class="table-tr">
             <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
                 @Html.DisplayFor(modelItem => item.Car.Description)
+            </a>
+        </td>
+        <td class="table-tr">
+            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                @Html.DisplayFor(modelItem => item.State.Name)
             </a>
         </td>
         <td class="table-tr">

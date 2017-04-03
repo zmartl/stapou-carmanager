@@ -52,13 +52,24 @@ namespace stapolizeiuster_carmanager.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(planning.Car.Id > 0)
+                if (planning.Car.Id > 0)
+                {
                     planning.Car = _carsController.GetSingleById(planning.Car.Id);
+                } else
+                {
+                    return RedirectToAction("Index", new { message = "createConflict" });
+                }
                 if (planning.State.Id > 0)
+                {
                     planning.State = _statesController.GetSingleById(planning.State.Id);
+                } else
+                {
+                    return RedirectToAction("Index", new { message = "createConflict" });
+                }
+
                 db.Plannings.Add(planning);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "createSuccess" });
             }
 
             return View(planning);
@@ -90,7 +101,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Entry(planning).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "editSuccess" });
             }
             return View(planning);
         }
@@ -118,7 +129,7 @@ namespace stapolizeiuster_carmanager.Controllers
             Planning planning = db.Plannings.Find(id);
             db.Plannings.Remove(planning);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = "deleteSuccess" });
         }
 
         protected override void Dispose(bool disposing)

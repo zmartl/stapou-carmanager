@@ -63,7 +63,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Cars.Add(car);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "createSuccess" });
             }
 
             return View(car);
@@ -95,7 +95,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Entry(car).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "editSuccess" });
             }
             return View(car);
         }
@@ -103,6 +103,10 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Cars/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (db.Plannings.Any(x => x.Car.Id == id))
+            {
+                return RedirectToAction("Index", new { message = "deleteConflict" });
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -122,8 +126,9 @@ namespace stapolizeiuster_carmanager.Controllers
         {
             Car car = db.Cars.Find(id);
             db.Cars.Remove(car);
+
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = "deleteSuccess" });
         }
 
         protected override void Dispose(bool disposing)

@@ -1,18 +1,32 @@
 ﻿@model stapolizeiuster_carmanager.Models.Planning
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Planung löschen";
 }
 
 <h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@Resource.Functions.confirm_delete</h3>
 <div>
     <h4>Planning</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.StartTime)
+            Fahrzeug
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Car.Description) - @Html.DisplayFor(model => model.Car.Radio)
+        </dd>
+        <dt>
+           Status
+        </dt>
+
+        <dd>
+            @Html.DisplayNameFor(model => model.State.Name)
+        </dd>
+        <dt>
+            Startzeit
         </dt>
 
         <dd>
@@ -20,7 +34,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndTime)
+            Endzeit
         </dt>
 
         <dd>
