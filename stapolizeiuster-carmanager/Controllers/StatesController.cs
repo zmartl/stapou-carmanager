@@ -123,5 +123,16 @@ namespace stapolizeiuster_carmanager.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public IEnumerable<State> Get()
+        {
+            return db.States.ToList();
+        }
+
+        public State GetSingleById(int id)
+        {
+            return db.States.FirstOrDefault(x => x.Id == id);
+        }
+
     }
 }

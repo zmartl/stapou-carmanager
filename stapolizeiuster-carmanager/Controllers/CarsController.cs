@@ -20,6 +20,17 @@ namespace stapolizeiuster_carmanager.Controllers
             return View(db.Cars.ToList());
         }
 
+        public IEnumerable<Car> Get()
+        {
+            return db.Cars.ToList();
+        }
+
+        public Car GetSingleById(int id)
+        {
+            return db.Cars.FirstOrDefault(x => x.Id == id);
+        }
+
+
         // GET: Cars/Details/5
         public ActionResult Details(int? id)
         {

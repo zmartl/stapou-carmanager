@@ -13,11 +13,13 @@ namespace stapolizeiuster_carmanager.Controllers
     public class PlanningsController : Controller
     {
         private stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
+        private static CarsController _carsController = new CarsController();
+        private static StatesController _statesController = new StatesController();
 
         // GET: Plannings
         public ActionResult Index()
         {
-            return View(db.Plannings.ToList());
+            return View(db.Plannings.Include(x => x.Car).Include(x => x.State).ToList());
         }
 
         // GET: Plannings/Details/5
@@ -38,9 +40,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Create
         public ActionResult Create()
         {
-            ViewBag.Cars = new SelectList(db.Cars, "Id", "Description");
-            ViewBag.States = new SelectList(db.States, "Id", "Name");
-            return View();
+           return View();
         }
 
         // POST: Plannings/Create
@@ -48,10 +48,14 @@ namespace stapolizeiuster_carmanager.Controllers
         // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StartTime,EndTime")] Planning planning)
+        public ActionResult Create([Bind(Include = "Id,StartTime,EndTime,Car,State")] Planning planning)
         {
             if (ModelState.IsValid)
             {
+                if(planning.Car.Id > 0)
+                    planning.Car = _carsController.GetSingleById(planning.Car.Id);
+                if (planning.State.Id > 0)
+                    planning.State = _statesController.GetSingleById(planning.State.Id);
                 db.Plannings.Add(planning);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -124,6 +128,31 @@ namespace stapolizeiuster_carmanager.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //Get Data for DropDown
+        public static IEnumerable<SelectListItem> FillCarsDropDown()
+        {
+            var list = new List<SelectListItem>();
+            var items = _carsController.Get();
+
+            foreach (var item in items)
+            {
+                list.Add(new SelectListItem() { Text = item.Description + " - " + item.Radio, Value = item.Id.ToString() });
+            }
+            return list;
+        }
+
+        public static IEnumerable<SelectListItem> FillStatesDropDown()
+        {
+            var list = new List<SelectListItem>();
+            var items = _statesController.Get();
+
+            foreach (var item in items)
+            {
+                list.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+            return list;
         }
     }
 }

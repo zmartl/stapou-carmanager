@@ -5,10 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Stadtpolizei Uster Carmanager</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Site.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/bootstrap-datetimepicker.min.css")
     @Styles.Render("~/Content/font-awesome.min.css")
     @Styles.Render("~/Content/app.css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
     <nav class="navbar navbar-default">
@@ -49,6 +52,21 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("/Scripts/moment-with-locales.min.js")
+    @Scripts.Render("/Scripts/bootstrap-datetimepicker.min.js")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                    locale: 'de'
+                });
+            });
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    locale: 'de'
+                });
+            });
+    </script>
 </body>
 </html>
