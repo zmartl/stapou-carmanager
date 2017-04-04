@@ -7,58 +7,82 @@
 <h2>@ViewBag.Title</h2>
 
 <p>
-    <a href="@Url.Action("Create", "Plannings")">
+    <a data-toggle="modal" data-target="#modal">
         <i class="fa fa-plus" aria-hidden="true"></i> Planung hinzufügen
     </a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            Fahrzeug
-        </th>
-        <th>
-            Status
-        </th>
-        <th>
-            Anfang
-        </th>
-        <th>
-            Ende
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td class="table-tr">
-            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
-                @Html.DisplayFor(modelItem => item.Car.Description)
-            </a>
-        </td>
-        <td class="table-tr">
-            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
-                @Html.DisplayFor(modelItem => item.State.Name)
-            </a>
-        </td>
-        <td class="table-tr">
-            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </a>
-        </td>
-        <td class="table-tr">
-            <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </a>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndTime)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Fahrzeug
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Anfang
+            </th>
+            <th>
+                Ende
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="table-tr">
+                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                        @Html.DisplayFor(modelItem => item.Car.Description) - @Html.DisplayFor(modelItem => item.Car.Radio)
+                    </a>
+                </td>
+                <td class="table-tr">
+                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                        @Html.DisplayFor(modelItem => item.State.Name)
+                    </a>
+                </td>
+                <td class="table-tr">
+                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </a>
+                </td>
+                <td class="table-tr">
+                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </a>
+                </td>
+                <td class="text-right table-action-links">
+                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a> |
+                    <a href="@Url.Action("Delete", "Plannings", new { id = item.Id })">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Planing hinzufügen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Create", "Plannings", new { startTime = new DateTime(2017,04,04,15,00,00), endTime = new DateTime(2017,04,04,17,00,00)})" />
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>

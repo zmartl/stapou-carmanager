@@ -11,30 +11,33 @@
         <i class="fa fa-plus" aria-hidden="true"></i> Status hinzufügen
     </a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th class="text-right">Aktionen</th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td class="table-tr">
-            <a href="@Url.Action("Edit", "States", new { id = item.Id })">
-                @Html.DisplayFor(modelItem => item.Name)
-            </a>
-        </td>
-        <td class="text-right table-action-links">
-            <a href="@Url.Action("Edit", "States", new { id = item.Id })">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </a> |
-            <a href="@Url.Action("Delete", "States", new { id = item.Id })">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </a>
-        </td>
-    </tr>
-}
-
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th class="text-right">Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="table-tr">
+                    <a href="@Url.Action("Edit", "States", new { id = item.Id })">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                </td>
+                <td class="text-right table-action-links">
+                    <a href="@Url.Action("Edit", "States", new { id = item.Id })">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a> |
+                    <a href="@Url.Action("Delete", "States", new { id = item.Id })">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

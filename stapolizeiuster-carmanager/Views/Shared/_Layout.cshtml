@@ -59,17 +59,22 @@
     @Scripts.Render("/Scripts/sweetalert2.min.js")
     @Scripts.Render("/Scripts/toastr.min.js")
     @Scripts.Render("/Scripts/messageHelper.js")
+    @Scripts.Render("/Scripts/onInputChangeHelper.js")
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
         $(function () {
             $('#datetimepicker1').datetimepicker({
                 locale: 'de'
+            }).on("dp.change", function (e) {
+                getAvailableCars(e.date);
             });
         });
         $(function () {
             $('#datetimepicker2').datetimepicker({
                 locale: 'de'
+            }).on("dp.change", function (e) {
+                getAvailableCars(e);
             });
         });
     </script>

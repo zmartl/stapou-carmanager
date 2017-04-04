@@ -20,6 +20,7 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Index()
         {
             return View(db.Plannings.Include(x => x.Car).Include(x => x.State).ToList());
+
         }
 
         // GET: Plannings/Details/5
@@ -38,9 +39,11 @@ namespace stapolizeiuster_carmanager.Controllers
         }
 
         // GET: Plannings/Create
-        public ActionResult Create()
+        public ActionResult Create(DateTime startTime = new DateTime(), DateTime endTime = new DateTime())
         {
-           return View();
+            ViewBag.Cars = new SelectList(db.Plannings.Where(x => x.StartTime <= startTime && x.EndTime >= endTime).ToList(), "Car.Id", "Car.Radio");
+            ViewBag.States = new SelectList(db.States, "Id", "Name");
+            return View();
         }
 
         // POST: Plannings/Create
@@ -54,14 +57,14 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 if (planning.Car.Id > 0)
                 {
-                    planning.Car = _carsController.GetSingleById(planning.Car.Id);
+                    planning.Car = db.Cars.SingleOrDefault(c => c.Id == planning.Car.Id);
                 } else
                 {
                     return RedirectToAction("Index", new { message = "createConflict" });
                 }
                 if (planning.State.Id > 0)
                 {
-                    planning.State = _statesController.GetSingleById(planning.State.Id);
+                    planning.State = db.States.SingleOrDefault(s => s.Id == planning.State.Id);
                 } else
                 {
                     return RedirectToAction("Index", new { message = "createConflict" });
@@ -87,6 +90,9 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Cars = new SelectList(db.Cars, "Id", "Radio", planning.Car.Id);
+            ViewBag.States = new SelectList(db.States, "Id", "Name", planning.State.Id);
+
             return View(planning);
         }
 
@@ -95,7 +101,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,StartTime,EndTime")] Planning planning)
+        public ActionResult Edit([Bind(Include = "Id,StartTime,EndTime,Car,State")] Planning planning)
         {
             if (ModelState.IsValid)
             {
@@ -145,11 +151,11 @@ namespace stapolizeiuster_carmanager.Controllers
         public static IEnumerable<SelectListItem> FillCarsDropDown()
         {
             var list = new List<SelectListItem>();
-            var items = _carsController.Get();
+            var items = _carsController.GetAvailableCars();
 
             foreach (var item in items)
             {
-                list.Add(new SelectListItem() { Text = item.Description + " - " + item.Radio, Value = item.Id.ToString() });
+                list.Add(new SelectListItem() { Text = item.Car.Description + " - " + item.Car.Radio, Value = item.Car.Id.ToString() });
             }
             return list;
         }
