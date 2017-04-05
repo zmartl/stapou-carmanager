@@ -129,9 +129,20 @@ namespace stapolizeiuster_carmanager.Controllers
             base.Dispose(disposing);
         }
 
-        public IEnumerable<Planning> GetAvailableCars(DateTime startTime = new DateTime(), DateTime endTime = new DateTime())
-        {
-            return db.Plannings.Where(x => x.StartTime <= startTime && x.EndTime >= endTime).ToList();
+        public IEnumerable<Car> GetAvailableCars(DateTime startTime, DateTime endTime)
+        { 
+            var plannedCars = db.Plannings.Where(x => startTime >= x.StartTime && endTime <= x.EndTime).ToList();
+            var allCars = db.Cars.ToList();
+
+            foreach(var item in plannedCars)
+            {
+                if (allCars.Contains(item.Car))
+                {
+                    allCars.Remove(item.Car);
+                }
+            }
+
+            return allCars;
         }
     }
 }

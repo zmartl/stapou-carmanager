@@ -16,17 +16,18 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StartTime, "Startzeit", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-
-                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", id = "datetimepicker1", disabled = true } })
-                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                <p class="form-control-static">
+                    @Model.StartTime.ToString("d") @Model.StartTime.ToString("t")
+                </p>
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.EndTime, "Endzeit", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", id = "datetimepicker2", disabled = true } })
-                @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                <p class="form-control-static">
+                    @Model.EndTime.ToString("d") @Model.EndTime.ToString("t")
+                </p>
             </div>
         </div>
         <hr />
@@ -45,7 +46,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Car, "Fahrzeug", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Car.Id, stapolizeiuster_carmanager.Controllers.PlanningsController.FillCarsDropDown(), htmlAttributes: new { @class = "form-control col-md-2" })
+                @Html.DropDownListFor(model => model.Car.Id, stapolizeiuster_carmanager.Controllers.PlanningsController.FillCarsDropDown(Model.StartTime, Model.EndTime), htmlAttributes: new { @class = "form-control col-md-2" })
                 @Html.ValidationMessageFor(model => model.Car, "", new { @class = "text-danger" })
             </div>
         </div>

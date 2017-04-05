@@ -39,11 +39,11 @@ namespace stapolizeiuster_carmanager.Controllers
         }
 
         // GET: Plannings/Create
-        public ActionResult Create(DateTime startTime = new DateTime(), DateTime endTime = new DateTime())
+        public ActionResult Create(DateTime startTime, DateTime endTime)
         {
-            ViewBag.Cars = new SelectList(db.Plannings.Where(x => x.StartTime <= startTime && x.EndTime >= endTime).ToList(), "Car.Id", "Car.Radio");
+            ViewBag.Cars = new SelectList(db.Plannings.Where(x => x.StartTime >= startTime && x.EndTime <= endTime).ToList(), "Car.Id", "Car.Radio");
             ViewBag.States = new SelectList(db.States, "Id", "Name");
-            return View();
+            return View(new Planning { StartTime = startTime, EndTime = endTime });
         }
 
         // POST: Plannings/Create
@@ -148,15 +148,21 @@ namespace stapolizeiuster_carmanager.Controllers
         }
 
         //Get Data for DropDown
-        public static IEnumerable<SelectListItem> FillCarsDropDown()
+        public static IEnumerable<SelectListItem> FillCarsDropDown(DateTime startTime, DateTime endTime)
         {
             var list = new List<SelectListItem>();
-            var items = _carsController.GetAvailableCars();
+            var items = _carsController.GetAvailableCars(startTime, endTime);
 
             foreach (var item in items)
             {
-                list.Add(new SelectListItem() { Text = item.Car.Description + " - " + item.Car.Radio, Value = item.Car.Id.ToString() });
+                list.Add(new SelectListItem() { Text = item.Description + " - " + item.Radio, Value = item.Id.ToString() });
             }
+
+            if (!list.Any())
+            {
+                list.Add(new SelectListItem() { Text = "Keine Fahrzeuge vorhanden", Value = "0", Disabled = true });
+            }
+
             return list;
         }
 
