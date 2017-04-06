@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<stapolizeiuster_carmanager.Models.Planning>
-
 @{
     ViewBag.Title = "Planungs Übersicht";
 }
-
 <h2>@ViewBag.Title</h2>
-
 <p>
     <a data-toggle="modal" data-target="#modal">
         <i class="fa fa-plus" aria-hidden="true"></i> Planung hinzufügen
@@ -34,30 +31,30 @@
         {
             <tr>
                 <td class="table-tr">
-                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Edit", "Plannings", new {id = item.Id})">
                         @Html.DisplayFor(modelItem => item.Car.Description) - @Html.DisplayFor(modelItem => item.Car.Radio)
                     </a>
                 </td>
                 <td class="table-tr">
-                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Edit", "Plannings", new {id = item.Id})">
                         @Html.DisplayFor(modelItem => item.State.Name)
                     </a>
                 </td>
                 <td class="table-tr">
-                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Edit", "Plannings", new {id = item.Id})">
                         @Html.DisplayFor(modelItem => item.StartTime)
                     </a>
                 </td>
                 <td class="table-tr">
-                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Edit", "Plannings", new {id = item.Id})">
                         @Html.DisplayFor(modelItem => item.EndTime)
                     </a>
                 </td>
                 <td class="text-right table-action-links">
-                    <a href="@Url.Action("Edit", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Edit", "Plannings", new {id = item.Id})">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a> |
-                    <a href="@Url.Action("Delete", "Plannings", new { id = item.Id })">
+                    <a href="@Url.Action("Delete", "Plannings", new {id = item.Id})">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </a>
                 </td>
@@ -65,33 +62,34 @@
         }
     </tbody>
 </table>
-
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Planing hinzufügen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Planung hinzufügen</h4>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" id="datetimepicker1" />
+                <div class="form-horizontal">
+                    <form>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Description">Startzeit</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="datetimepicker1" />
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="datetimepicker2" />
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Description">Endzeit</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="datetimepicker2" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="javascript:void();" data-href="@Url.Action("Create", "Plannings")" class="btn btn-primary" id="send">Weiter &raquo;</a>
             </div>
-
             <script>
                 $(document).ready(function () {
 
@@ -99,8 +97,6 @@
                     $("#send").click(function () {
                         var href = $(this).data("href");
 
-
-                        
                         var dateFrom = $("#datetimepicker1").data('DateTimePicker').date().toISOString();
                         var dateTo = $("#datetimepicker2").data('DateTimePicker').date().toISOString();
 
