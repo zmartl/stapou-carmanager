@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+
 using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
     public class CarsController : Controller
     {
-        private stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
+        private readonly stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
 
         // GET: Cars
         public ActionResult Index()
@@ -24,14 +23,10 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Car car = db.Cars.Find(id);
+            var car = db.Cars.Find(id);
             if (car == null)
-            {
                 return HttpNotFound();
-            }
             return View(car);
         }
 
@@ -52,7 +47,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Cars.Add(car);
                 db.SaveChanges();
-                return RedirectToAction("Index", new { message = "createSuccess" });
+                return RedirectToAction("Index", new {message = "createSuccess"});
             }
 
             return View(car);
@@ -62,14 +57,10 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Car car = db.Cars.Find(id);
+            var car = db.Cars.Find(id);
             if (car == null)
-            {
                 return HttpNotFound();
-            }
             return View(car);
         }
 
@@ -84,7 +75,7 @@ namespace stapolizeiuster_carmanager.Controllers
             {
                 db.Entry(car).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", new { message = "editSuccess" });
+                return RedirectToAction("Index", new {message = "editSuccess"});
             }
             return View(car);
         }
@@ -93,54 +84,51 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Delete(int? id)
         {
             if (db.Plannings.Any(x => x.Car.Id == id))
-            {
-                return RedirectToAction("Index", new { message = "deleteConflict" });
-            }
+                return RedirectToAction("Index", new {message = "deleteConflict"});
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Car car = db.Cars.Find(id);
+            var car = db.Cars.Find(id);
             if (car == null)
-            {
                 return HttpNotFound();
-            }
             return View(car);
         }
 
         // POST: Cars/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Car car = db.Cars.Find(id);
+            var car = db.Cars.Find(id);
             db.Cars.Remove(car);
 
             db.SaveChanges();
-            return RedirectToAction("Index", new { message = "deleteSuccess" });
+            return RedirectToAction("Index", new {message = "deleteSuccess"});
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
-        public IEnumerable<Car> GetAvailableCars(DateTime startTime, DateTime endTime)
-        { 
-            var plannedCars = db.Plannings.Where(x => startTime >= x.StartTime && endTime <= x.EndTime).ToList();
+        public IEnumerable<Car> GetAvailableCars(DateTime startTime, DateTime endTime, Car car)
+        {
+                   
+            var plannedCars = db.Plannings.Where(
+                        x =>
+                            x.StartTime <= startTime && startTime <= x.EndTime ||
+                            x.StartTime <= endTime && endTime <= x.EndTime ||
+                            startTime <= x.StartTime && endTime >= x.EndTime).ToList();
             var allCars = db.Cars.ToList();
 
-            foreach(var item in plannedCars)
-            {
-                if (allCars.Contains(item.Car))
-                {
+            if (car == null)
+                car = new Car {Id = 0};
+
+            foreach (var item in plannedCars)
+                if (allCars.Contains(item.Car) && item.Car.Id != car.Id)
                     allCars.Remove(item.Car);
-                }
-            }
 
             return allCars;
         }

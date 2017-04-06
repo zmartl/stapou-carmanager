@@ -1,49 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+
 using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
     public class PlanningsController : Controller
     {
-        private stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
-        private static CarsController _carsController = new CarsController();
-        private static StatesController _statesController = new StatesController();
+        private static readonly CarsController _carsController = new CarsController();
+        private static readonly StatesController _statesController = new StatesController();
+        private readonly stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
 
         // GET: Plannings
         public ActionResult Index()
         {
             return View(db.Plannings.Include(x => x.Car).Include(x => x.State).ToList());
-
         }
 
         // GET: Plannings/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Planning planning = db.Plannings.Find(id);
+            var planning = db.Plannings.Find(id);
             if (planning == null)
-            {
                 return HttpNotFound();
-            }
             return View(planning);
         }
 
         // GET: Plannings/Create
         public ActionResult Create(DateTime startTime, DateTime endTime)
         {
-            ViewBag.Cars = new SelectList(db.Plannings.Where(x => x.StartTime >= startTime && x.EndTime <= endTime).ToList(), "Car.Id", "Car.Radio");
-            ViewBag.States = new SelectList(db.States, "Id", "Name");
-            return View(new Planning { StartTime = startTime, EndTime = endTime });
+            ViewBag.Cars =
+                new SelectList(
+                    db.Plannings.Where(
+                        x =>
+                            x.StartTime >= startTime && startTime >= x.EndTime ||
+                            x.StartTime >= endTime && endTime >= x.EndTime ||
+                            startTime >= x.StartTime && endTime <= x.EndTime).ToList(), "Car.Id", "Car.Radio");
+
+            //var overlap =  new DateTime(2017,04,06,07,00,00) >= startTime && startTime >= new DateTime(2017, 04, 06, 11, 00, 00);
+            //var overlap2 = new DateTime(2017, 04, 06, 07, 00, 00) >= endTime && endTime >= new DateTime(2017, 04, 06, 11, 00, 00);
+            //var overlap3 = startTime >= new DateTime(2017, 04, 06, 07, 00, 00) && endTime <= new DateTime(2017, 04, 06, 11, 00, 00);
+
+
+            return View(new Planning {StartTime = startTime, EndTime = endTime});
         }
 
         // POST: Plannings/Create
@@ -56,23 +61,17 @@ namespace stapolizeiuster_carmanager.Controllers
             if (ModelState.IsValid)
             {
                 if (planning.Car.Id > 0)
-                {
                     planning.Car = db.Cars.SingleOrDefault(c => c.Id == planning.Car.Id);
-                } else
-                {
-                    return RedirectToAction("Index", new { message = "createConflict" });
-                }
+                else
+                    return RedirectToAction("Index", new {message = "createConflict"});
                 if (planning.State.Id > 0)
-                {
                     planning.State = db.States.SingleOrDefault(s => s.Id == planning.State.Id);
-                } else
-                {
-                    return RedirectToAction("Index", new { message = "createConflict" });
-                }
+                else
+                    return RedirectToAction("Index", new {message = "createConflict"});
 
                 db.Plannings.Add(planning);
                 db.SaveChanges();
-                return RedirectToAction("Index", new { message = "createSuccess" });
+                return RedirectToAction("Index", new {message = "createSuccess"});
             }
 
             return View(planning);
@@ -82,17 +81,10 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Planning planning = db.Plannings.Find(id);
+            var planning = db.Plannings.Find(id);
             if (planning == null)
-            {
                 return HttpNotFound();
-            }
-            ViewBag.Cars = new SelectList(db.Cars, "Id", "Radio", planning.Car.Id);
-            ViewBag.States = new SelectList(db.States, "Id", "Name", planning.State.Id);
-
             return View(planning);
         }
 
@@ -105,9 +97,18 @@ namespace stapolizeiuster_carmanager.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (planning.Car.Id > 0)
+                    planning.Car = db.Cars.SingleOrDefault(c => c.Id == planning.Car.Id);
+                else
+                    return RedirectToAction("Index", new {message = "createConflict"});
+                if (planning.State.Id > 0)
+                    planning.State = db.States.SingleOrDefault(s => s.Id == planning.State.Id);
+                else
+                    return RedirectToAction("Index", new {message = "createConflict"});
+
                 db.Entry(planning).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", new { message = "editSuccess" });
+                return RedirectToAction("Index", new {message = "editSuccess"});
             }
             return View(planning);
         }
@@ -116,52 +117,43 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Planning planning = db.Plannings.Find(id);
+            var planning = db.Plannings.Find(id);
             if (planning == null)
-            {
                 return HttpNotFound();
-            }
             return View(planning);
         }
 
         // POST: Plannings/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Planning planning = db.Plannings.Find(id);
+            var planning = db.Plannings.Find(id);
             db.Plannings.Remove(planning);
             db.SaveChanges();
-            return RedirectToAction("Index", new { message = "deleteSuccess" });
+            return RedirectToAction("Index", new {message = "deleteSuccess"});
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         //Get Data for DropDown
-        public static IEnumerable<SelectListItem> FillCarsDropDown(DateTime startTime, DateTime endTime)
+        public static IEnumerable<SelectListItem> FillCarsDropDown(DateTime startTime, DateTime endTime, Car car = null)
         {
             var list = new List<SelectListItem>();
-            var items = _carsController.GetAvailableCars(startTime, endTime);
+            var items = _carsController.GetAvailableCars(startTime, endTime, car);
 
             foreach (var item in items)
-            {
-                list.Add(new SelectListItem() { Text = item.Description + " - " + item.Radio, Value = item.Id.ToString() });
-            }
+                list.Add(new SelectListItem {Text = item.Description + " - " + item.Radio, Value = item.Id.ToString()});
 
             if (!list.Any())
-            {
-                list.Add(new SelectListItem() { Text = "Keine Fahrzeuge vorhanden", Value = "0", Disabled = true });
-            }
+                list.Add(new SelectListItem {Text = "Keine Fahrzeuge vorhanden", Value = "0", Disabled = true});
 
             return list;
         }
@@ -172,9 +164,7 @@ namespace stapolizeiuster_carmanager.Controllers
             var items = _statesController.Get();
 
             foreach (var item in items)
-            {
-                list.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
+                list.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
             return list;
         }
     }
