@@ -13,22 +13,8 @@ namespace stapolizeiuster_carmanager.Controllers
 
         public ActionResult Index()
         {
-            var datetime = new DateTime(2017,04,04,12,00,00);
+            var datetime = DateTime.Now;
             return View(db.Plannings.Where(x => x.StartTime <= datetime && x.EndTime >= datetime).ToList());
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

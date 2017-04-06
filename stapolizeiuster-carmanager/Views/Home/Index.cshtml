@@ -5,16 +5,27 @@
 }
 
 <div class="row">
+    <div class="page-header">
+        <h1>Aktuell im Einsatz<small> (@Model.Count())</small></h1>
+    </div>
     @foreach (var item in Model)
     {
-        <div class="card">
-            <div class="card-header">
-                @item.Car.Description - @item.Car.Radio
-            </div>
-            <div class="card-block">
-                <h4 class="card-title">@item.State.Name</h4>
-                <p class="card-text">@item.StartTime - @item.EndTime</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="col-md-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">
+                        <i class="fa fa-car fa-3" aria-hidden="true"></i>
+                    </h3>
+                    <br />
+                    <h3 class="panel-title text-center">
+                        @item.Car.Description - @item.Car.Radio
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <h4 class="col-md-12"><b>@item.State.Name</b></h4>
+                    <label class="col-md-2">Von:</label><p class="col-md-10">@item.StartTime.ToString("d") @item.StartTime.ToString("t")</p>
+                    <label class="col-md-2">Bis:</label><p class="col-md-10">@item.EndTime.ToString("d") @item.EndTime.ToString("t")</p>
+                </div>
             </div>
         </div>
     }

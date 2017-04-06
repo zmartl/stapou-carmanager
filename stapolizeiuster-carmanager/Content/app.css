@@ -1,18 +1,17 @@
-﻿body {
-}
+﻿body { }
 
-.nav-logo {
-    width: 150px !important;
-}
+.nav-logo { width: 150px !important; }
 
 .table-tr a {
     color: #333333;
-    width: 100%;
+    cursor: pointer;
     display: block;
     text-decoration: none;
-    cursor: pointer;
+    width: 100%;
 }
 
-.table-action-links a:link {
-    text-decoration: none;
-}
+.table-action-links a:link { text-decoration: none; }
+
+/*Font Awesome Extension*/
+
+.fa-3 { font-size: 4em; }
