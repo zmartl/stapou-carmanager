@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -29,8 +29,10 @@
                 <img src="~/stadtuster.png" alt="logo" class="nav-logo">
             </div>
             <div id="navbar1" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav">                                            
                     <li>@Html.ActionLink("Startseite", "Index", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    { 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Stammdaten <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -39,6 +41,24 @@
                         </ul>
                     </li>
                     <li>@Html.ActionLink("Planung", "Index", "Plannings")</li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">                                                      
+                   <li class="text-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Willkommen, @ViewBag.Name! <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="/Home/Logout">Logout</a></li>                              
+                            </ul>
+                          </li>                            
+                        }
+                        else
+                        {
+                            <li><a href="#" onclick="lock.show();"><b><i class="fa fa-sign-in" aria-hidden="true"></i> Login</b></a></li>
+                        }
+                    </li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -73,6 +93,19 @@
                 locale: 'de'
             });
         });
+
+    </script>
+    <script src="https://cdn.auth0.com/js/lock/10.14/lock.min.js"></script>
+    <script>
+  var lock = new Auth0Lock('Z3aZNItzApjz26Rj6iVGELOdQUS9qMkw', 'luca-marti.eu.auth0.com', {
+    auth: {
+        redirectUrl: 'http://stapou-car.azurewebsites.net/LoginCallback.ashx',
+      responseType: 'code',
+      params: {
+        scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+      }
+    }
+  });
     </script>
 </body>
 </html>
