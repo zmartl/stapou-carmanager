@@ -73,6 +73,19 @@
                 locale: 'de'
             });
         });
+
+    </script>
+    <script src="https://cdn.auth0.com/js/lock/10.14/lock.min.js"></script>
+    <script>
+  var lock = new Auth0Lock('Z3aZNItzApjz26Rj6iVGELOdQUS9qMkw', 'luca-marti.eu.auth0.com', {
+    auth: {
+        redirectUrl: 'http://stapou-car.azurewebsites.net/LoginCallback.ashx',
+      responseType: 'code',
+      params: {
+        scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+      }
+    }
+  });
     </script>
 </body>
 </html>

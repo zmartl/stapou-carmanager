@@ -5,6 +5,15 @@
 }
 
 <div class="row">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>Welcome, @ViewBag.Name!</p>
+        <p><a href="/Home/Logout" class="btn btn-primary btn-lg">Logout</a></p>
+    }
+    else
+    {
+        <p><a href="#" class="btn btn-primary btn-lg" onclick="lock.show();">Login</a></p>
+    }
     <div class="page-header">
         <h1>Aktuell im Einsatz<small> (@Model.Count())</small></h1>
     </div>
@@ -28,5 +37,6 @@
                 </div>
             </div>
         </div>
+
     }
 </div>
