@@ -1,0 +1,18 @@
+﻿@model IEnumerable<stapolizeiuster_carmanager.Models.Planning>
+
+@{
+    ViewBag.Title = "Login - Stadtpolizei Uster";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h1 class="alert-heading">Warnung!</h1>
+    <h4>Sie sind nicht autorisiert, diese Aktion durchzuführen</h4>
+    <p>Loggen Sie sich ein, um Zugriff auf diese Applikation zu erhalten</p>
+</div>
+
+<script>
+    $(document).ready(function () {
+        lock.show();
+    });
+
+</script>

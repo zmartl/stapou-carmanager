@@ -169,6 +169,7 @@
       <DependentUpon>Functions.resx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CarsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlanningsController.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="badge.png" />
     <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
@@ -285,6 +287,7 @@
     <Content Include="Views\Plannings\Delete.cshtml" />
     <Content Include="Views\Plannings\Edit.cshtml" />
     <Content Include="Views\Plannings\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,34 +10,22 @@ using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
-    public class StatesController : Controller
+    [Authorize]
+    public class StatesController : BaseController
     {
         private stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
 
         // GET: States
         public ActionResult Index()
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             return View(db.States.ToList());
-        }
-
-        // GET: States/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            State state = db.States.Find(id);
-            if (state == null)
-            {
-                return HttpNotFound();
-            }
-            return View(state);
         }
 
         // GET: States/Create
         public ActionResult Create()
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             return View();
         }
 
@@ -61,6 +49,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: States/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -92,6 +81,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: States/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

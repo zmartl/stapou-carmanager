@@ -9,30 +9,22 @@ using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
-    public class CarsController : Controller
+    [Authorize]
+    public class CarsController : BaseController
     {
         private readonly stapolizeiuster_carmanagerContext db = new stapolizeiuster_carmanagerContext();
 
         // GET: Cars
         public ActionResult Index()
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             return View(db.Cars.ToList());
-        }
-
-        // GET: Cars/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var car = db.Cars.Find(id);
-            if (car == null)
-                return HttpNotFound();
-            return View(car);
         }
 
         // GET: Cars/Create
         public ActionResult Create()
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             return View();
         }
 
@@ -56,6 +48,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Cars/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var car = db.Cars.Find(id);
@@ -83,6 +76,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Cars/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (db.Plannings.Any(x => x.Car.Id == id))
                 return RedirectToAction("Index", new {message = "deleteConflict"});
             if (id == null)

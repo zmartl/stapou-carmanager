@@ -9,7 +9,8 @@ using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
-    public class PlanningsController : Controller
+    [Authorize]
+    public class PlanningsController : BaseController
     {
         private static readonly CarsController _carsController = new CarsController();
         private static readonly StatesController _statesController = new StatesController();
@@ -18,12 +19,14 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings
         public ActionResult Index()
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             return View(db.Plannings.Include(x => x.Car).Include(x => x.State).ToList());
         }
 
         // GET: Plannings/Details/5
         public ActionResult Details(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var planning = db.Plannings.Find(id);
@@ -35,6 +38,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Create
         public ActionResult Create(DateTime startTime, DateTime endTime)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             ViewBag.Cars =
                 new SelectList(
                     db.Plannings.Where(
@@ -42,11 +46,6 @@ namespace stapolizeiuster_carmanager.Controllers
                             x.StartTime >= startTime && startTime >= x.EndTime ||
                             x.StartTime >= endTime && endTime >= x.EndTime ||
                             startTime >= x.StartTime && endTime <= x.EndTime).ToList(), "Car.Id", "Car.Radio");
-
-            //var overlap =  new DateTime(2017,04,06,07,00,00) >= startTime && startTime >= new DateTime(2017, 04, 06, 11, 00, 00);
-            //var overlap2 = new DateTime(2017, 04, 06, 07, 00, 00) >= endTime && endTime >= new DateTime(2017, 04, 06, 11, 00, 00);
-            //var overlap3 = startTime >= new DateTime(2017, 04, 06, 07, 00, 00) && endTime <= new DateTime(2017, 04, 06, 11, 00, 00);
-
 
             return View(new Planning {StartTime = startTime, EndTime = endTime});
         }
@@ -80,6 +79,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var planning = db.Plannings.Find(id);
@@ -130,6 +130,8 @@ namespace stapolizeiuster_carmanager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
+
             var planning = db.Plannings.Find(id);
             db.Plannings.Remove(planning);
             db.SaveChanges();
