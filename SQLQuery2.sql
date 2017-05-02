@@ -1,0 +1,1 @@
+﻿insert into [Statistics] (StartDate, EndDate, CreationDate, Creator, Car_Id) values ('10.10.2017', '11.10.2017', '10.10.2017', 'test', 1);

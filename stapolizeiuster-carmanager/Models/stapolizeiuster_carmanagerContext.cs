@@ -24,5 +24,7 @@ namespace stapolizeiuster_carmanager.Models
         public System.Data.Entity.DbSet<stapolizeiuster_carmanager.Models.State> States { get; set; }
 
         public System.Data.Entity.DbSet<stapolizeiuster_carmanager.Models.Planning> Plannings { get; set; }
+        
+        public System.Data.Entity.DbSet<stapolizeiuster_carmanager.Models.Statistic> Statistics { get; set; }
     }
 }

@@ -126,5 +126,10 @@ namespace stapolizeiuster_carmanager.Controllers
 
             return allCars;
         }
+
+        public IEnumerable<Car> Get()
+        {
+            return db.Cars.ToList();
+        }
     }
 }

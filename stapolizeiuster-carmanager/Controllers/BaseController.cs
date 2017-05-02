@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class BaseController : Controller
     {
         // GET: Base
@@ -14,7 +14,7 @@ namespace stapolizeiuster_carmanager.Controllers
             if (nameClaim != null && !string.IsNullOrEmpty(nameClaim.Value))
                 return nameClaim.Value;
 
-            return string.Empty;
+            return "null";
         }
     }
 }
