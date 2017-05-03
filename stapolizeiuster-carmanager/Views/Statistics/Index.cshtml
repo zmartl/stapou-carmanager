@@ -1,4 +1,5 @@
-﻿@model IEnumerable<stapolizeiuster_carmanager.Models.Statistic>
+﻿@using stapolizeiuster_carmanager.Controllers
+@model IEnumerable<stapolizeiuster_carmanager.Models.Statistic>
 
 @{
     ViewBag.Title = "Statistiken";
@@ -9,6 +10,10 @@
     <a href="@Url.Action("Create", "Statistics")">
         <i class="fa fa-plus" aria-hidden="true"></i> Statistik erstellen
     </a>
+</p>
+<p>
+    @Html.ActionLink("Fahrzeugstatistik", "CreateSingleCarSheet", "Statistics")
+    @Html.ActionLink("Planung", "CreateOverviewSheet", "Statistics")
 </p>
 <table class="table table-hover">
     <thead>
