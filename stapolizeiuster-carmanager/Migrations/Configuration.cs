@@ -4,7 +4,6 @@ namespace stapolizeiuster_carmanager.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-    using stapolizeiuster_carmanager.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<stapolizeiuster_carmanager.Models.stapolizeiuster_carmanagerContext>
     {
@@ -15,18 +14,18 @@ namespace stapolizeiuster_carmanager.Migrations
 
         protected override void Seed(stapolizeiuster_carmanager.Models.stapolizeiuster_carmanagerContext context)
         {
-            context.Cars.AddOrUpdate(p => p.Description,
-                new Car
-                {
-                    Description = "BMW",
-                    Radio = "9801"
-                });
+            //  This method will be called after migrating to the latest version.
 
-            context.States.AddOrUpdate(p => p.Name,
-                new State
-                {
-                    Name = "Regio"
-                });
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  to avoid creating duplicate seed data. E.g.
+            //
+            //    context.People.AddOrUpdate(
+            //      p => p.FullName,
+            //      new Person { FullName = "Andrew Peters" },
+            //      new Person { FullName = "Brice Lambson" },
+            //      new Person { FullName = "Rowan Miller" }
+            //    );
+            //
         }
     }
 }

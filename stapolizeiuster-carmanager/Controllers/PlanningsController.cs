@@ -169,5 +169,22 @@ namespace stapolizeiuster_carmanager.Controllers
                 list.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
             return list;
         }
+
+        public int GetCountPlannedPlanningsByState(IEnumerable<Planning> plannings, string state)
+        {
+            var count = plannings.Count(x => x.State.Name.Equals(state));
+            return count;
+        }
+
+        public IEnumerable<Planning> GetPlannedPlannings(DateTime starTime, DateTime endTime)
+        {
+            var plannedPlannings = db.Plannings.Where(
+                        x =>
+                            x.StartTime <= starTime && starTime <= x.EndTime ||
+                            x.StartTime <= endTime && endTime <= x.EndTime ||
+                            starTime <= x.StartTime && endTime >= x.EndTime).ToList();
+
+            return plannedPlannings;
+        }
     }
 }
