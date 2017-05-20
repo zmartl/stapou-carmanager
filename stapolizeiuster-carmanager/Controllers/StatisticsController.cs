@@ -32,10 +32,10 @@ namespace stapolizeiuster_carmanager.Controllers
         }
 
         // GET: Statistics/Create
-        public ActionResult Create()
+        public ActionResult Create(DateTime startTime, DateTime endTime)
         {
             ViewBag.Name = GetUserNamePrinicpals();
-            return View(new Statistic { Creator = GetUserNamePrinicpals() });
+            return View(new Statistic { Creator = GetUserNamePrinicpals(), StartDate = startTime, EndDate = endTime });
         }
 
         // GET: Statistics/CreateStatistics
@@ -191,7 +191,7 @@ namespace stapolizeiuster_carmanager.Controllers
                 worksheet.Cells[1, 1].Style.Font.Bold = true;
                 worksheet.Cells[1, 1].Value = "Auswertung - " + statistic.Car.Description + " " + statistic.Car.Radio;
                 worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Value = statistic.StartDate.ToString("d") + " - " + statistic.EndDate.ToString("d");
+                worksheet.Cells[2, 1].Value = statistic.StartDate.ToString("dd.MM.yyyy") + " - " + statistic.EndDate.ToString("dd.MM.yyyy");
                 worksheet.Cells[5, 1].Value = "Erstelldatum:";
                 worksheet.Cells[5, 2].Value = DateTime.Now.ToString("dd.MM.yyyy H:mm");
                 worksheet.Cells[6, 1].Value = "Ersteller:";

@@ -13,6 +13,29 @@
     
     <div class="form-horizontal">
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, "Startzeit", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">
+                    @Model.StartDate.ToString("dd.MM.yyyy") @Model.StartDate.ToString("HH:mm")
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
+
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, "Endzeit", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">
+                    @Model.EndDate.ToString("dd.MM.yyyy") @Model.EndDate.ToString("HH:mm")
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
+
+                </p>
+            </div>
+        </div>
+        <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Car, "Fahrzeug", new { @class = "control-label col-md-2" })
@@ -28,25 +51,6 @@
             @Html.LabelFor(model => model.Creator, "Ersteller", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input class="form-control" value="@Model.Creator" disabled="disabled" />
-            </div>
-        </div>
-
-        <hr/>
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, "Datum von", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", id = "datetimepicker1", type = "text", placeholder="Bitte Datum auswählen", required = "required" } })
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, "Datum bis", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", id = "datetimepicker2", type="text", placeholder = "Bitte Datum auswählen", required = "required" } })
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
