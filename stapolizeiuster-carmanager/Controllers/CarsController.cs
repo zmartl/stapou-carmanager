@@ -32,6 +32,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
         // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [ValidateHttpAntiForgeryToken]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Description,Radio")] Car car)
         {
@@ -61,6 +62,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
         // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [ValidateHttpAntiForgeryToken]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Description,Radio")] Car car)
         {
@@ -90,6 +92,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // POST: Cars/Delete/5
         [HttpPost]
         [ActionName("Delete")]
+        [ValidateHttpAntiForgeryToken]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
