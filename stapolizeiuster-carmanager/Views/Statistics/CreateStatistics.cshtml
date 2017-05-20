@@ -2,7 +2,7 @@
 @model stapolizeiuster_carmanager.Models.Statistic
 
 @{
-    ViewBag.Title = "Statsitik erstellen";
+    ViewBag.Title = "Planungsübersicht erstellen";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -12,26 +12,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Car, "Fahrzeug", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Car.Id, StatisticsController.FillCarsDropDown(), new { @class = "form-control col-md-2", required = "required" })
-                @Html.ValidationMessageFor(model => model.Car, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Creator, "Ersteller", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input class="form-control" value="@Model.Creator" disabled="disabled" />
-            </div>
-        </div>
-
-        <hr/>
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

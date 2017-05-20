@@ -20,7 +20,7 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Index()
         {
             ViewBag.Name = GetUserNamePrinicpals();
-            return View(db.Plannings.Include(x => x.Car).Include(x => x.State).ToList());
+            return View(db.Plannings.Include(x => x.Car).Include(x => x.State).Where(x => x.EndTime > DateTime.Now).ToList());
         }
 
         // GET: Plannings/Details/5

@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BaseController : Controller
     {
         // GET: Base

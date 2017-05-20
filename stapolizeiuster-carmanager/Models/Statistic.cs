@@ -7,11 +7,14 @@ namespace stapolizeiuster_carmanager.Models
     {
         public int Id { get; set; }
         public Car Car { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public DateTime StartDate { get;set; }
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public DateTime EndDate { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public DateTime CreationDate { get; set; }
         public string Creator { get; set; }
     }

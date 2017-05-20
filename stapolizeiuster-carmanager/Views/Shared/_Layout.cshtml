@@ -88,10 +88,40 @@
             $('#datetimepicker1').datetimepicker({
                 locale: 'de'
             });
+            $("#datetimepicker1").datetimepicker("setDate", Date.now().toString());
+            console.log(Date.now().toString());
+            $("#datetimepicker1").on("dp.change", function (e) {
+                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+            });
         });
         $(function () {
             $('#datetimepicker2').datetimepicker({
+                locale: 'de',
+                useCurrent: true,
+                defaultDate: new Date().toString("dd.MM.yyyy")
+            });
+            $("#datetimepicker2").on("dp.change", function (e) {
+                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+
+        $(function () {
+            $('#datetimepicker3').datetimepicker({
                 locale: 'de'
+
+            });
+            $("#datetimepicker3").on("dp.change", function (e) {
+                $('#datetimepicker4').data("DateTimePicker").minDate(e.date);
+            });
+        });
+        $(function () {
+            $('#datetimepicker4').datetimepicker({
+                locale: 'de',
+                useCurrent: true,
+                defaultDate: new Date().toString("dd.MM.yyyy")
+            });
+            $("#datetimepicker4").on("dp.change", function (e) {
+                $('#datetimepicker3').data("DateTimePicker").maxDate(e.date);
             });
         });
 

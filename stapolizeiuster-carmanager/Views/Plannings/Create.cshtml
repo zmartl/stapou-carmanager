@@ -18,7 +18,7 @@
             @Html.LabelFor(model => model.StartTime, "Startzeit", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <p class="form-control-static">
-                    @Model.StartTime.ToString("d") @Model.StartTime.ToString("t")
+                    @Model.StartTime.ToString("dd.MM.yyyy") @Model.StartTime.ToString("HH:mm")
                 </p>
             </div>
         </div>
@@ -27,7 +27,7 @@
             @Html.LabelFor(model => model.EndTime, "Endzeit", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <p class="form-control-static">
-                    @Model.EndTime.ToString("d") @Model.EndTime.ToString("t")
+                    @Model.EndTime.ToString("dd.MM.yyyy") @Model.EndTime.ToString("HH:mm")
                 </p>
             </div>
         </div>

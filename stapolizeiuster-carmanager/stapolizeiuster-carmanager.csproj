@@ -296,9 +296,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Statistics\Create.cshtml" />
     <Content Include="Views\Statistics\Delete.cshtml" />
-    <Content Include="Views\Statistics\Details.cshtml" />
     <Content Include="Views\Statistics\Edit.cshtml" />
     <Content Include="Views\Statistics\Index.cshtml" />
+    <Content Include="Views\Statistics\CreateStatistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

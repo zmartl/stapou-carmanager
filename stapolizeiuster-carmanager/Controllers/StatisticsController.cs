@@ -16,6 +16,7 @@ using stapolizeiuster_carmanager.Models;
 
 namespace stapolizeiuster_carmanager.Controllers
 {
+    [Authorize]
     public class StatisticsController : BaseController
     {
         private static readonly CarsController _carsController = new CarsController();
@@ -26,40 +27,41 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Statistics
         public ActionResult Index()
         {
-            return View(db.Statistics.ToList());
-        }
-
-        // GET: Statistics/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Statistic statistic = db.Statistics.Find(id);
-            if (statistic == null)
-            {
-                return HttpNotFound();
-            }
-            return View(statistic);
+            ViewBag.Name = GetUserNamePrinicpals();
+            return View(db.Statistics.Include(c => c.Car).ToList());
         }
 
         // GET: Statistics/Create
         public ActionResult Create()
         {
-
+            ViewBag.Name = GetUserNamePrinicpals();
             return View(new Statistic { Creator = GetUserNamePrinicpals() });
         }
+
+        // GET: Statistics/CreateStatistics
+        public void CreateStatistics(DateTime startTime, DateTime endTime)
+        {
+            CreateOverviewSheet(startTime, endTime);
+        }
+
 
         // POST: Statistics/Create
         // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
         // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StartDate,EndDate,CreationDate,Creator")] Statistic statistic)
+        public ActionResult Create([Bind(Include = "Id,StartDate,EndDate,CreationDate,Creator,Car")] Statistic statistic)
         {
             if (ModelState.IsValid)
             {
+                statistic.CreationDate = DateTime.Now;
+
+                if (statistic.Car.Id > 0)
+                    statistic.Car = db.Cars.SingleOrDefault(c => c.Id == statistic.Car.Id);
+                else
+                    return RedirectToAction("Index", new { message = "createConflict" });
+
+
                 db.Statistics.Add(statistic);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -68,45 +70,15 @@ namespace stapolizeiuster_carmanager.Controllers
             return View(statistic);
         }
 
-        // GET: Statistics/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Statistic statistic = db.Statistics.Find(id);
-            if (statistic == null)
-            {
-                return HttpNotFound();
-            }
-            return View(statistic);
-        }
-
-        // POST: Statistics/Edit/5
-        // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
-        // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,StartDate,EndDate,CreationDate,Creator")] Statistic statistic)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(statistic).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(statistic);
-        }
-
         // GET: Statistics/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Statistic statistic = db.Statistics.Find(id);
+            Statistic statistic = db.Statistics.Include(c => c.Car).Where(x => x.Id == id).FirstOrDefault();
             if (statistic == null)
             {
                 return HttpNotFound();
@@ -163,16 +135,16 @@ namespace stapolizeiuster_carmanager.Controllers
             if (isPlanning)
             {
                 worksheet.HeaderFooter.OddHeader.RightAlignedText = "Fahrzeugplanung - Export";
-                worksheet.Column(1).Width = 23;
-                worksheet.Column(2).Width = 23;
+                worksheet.Column(1).Width = 20;
+                worksheet.Column(2).Width = 20;
                 worksheet.Column(3).Width = 23;
                 worksheet.Column(4).Width = 20;
             }
             else
             {
                 worksheet.HeaderFooter.OddHeader.RightAlignedText = "Fahrzeugstatistik - Export";
-                worksheet.Column(1).Width = 27;
-                worksheet.Column(2).Width = 27;
+                worksheet.Column(1).Width = 25;
+                worksheet.Column(2).Width = 25;
                 worksheet.Column(3).Width = 35;
 
             }
@@ -188,15 +160,17 @@ namespace stapolizeiuster_carmanager.Controllers
         /// <summary>
         ///     Create the Excel-File with all devices
         /// </summary>
-        public FileInfo CreateSingleCarSheet()
+        public FileInfo CreateSingleCarSheet(Statistic statistic)
         {
             bool isPlanning = false;
-            Car car = new Car { Description = "BMW", Radio = "9801", Id = 1 };
-            DateTime starttime = DateTime.Now;
-            DateTime endtime = DateTime.Now.AddDays(2);
 
-            var filename = "Auswertung_" + car.Description + car.Radio + "_" + DateTime.Now.ToString("d") + ".xlsx";
+            var filename = "Auswertung_" + statistic.Car.Description + statistic.Car.Radio + "_" + DateTime.Now.ToString("d") + ".xlsx";
 
+
+            if (string.IsNullOrWhiteSpace(statistic.Creator))
+            {
+                statistic.Creator = GetUserNamePrinicpals();
+            } 
             var response = new FileInfo(filename);
 
             using (var package = new ExcelPackage(response))
@@ -205,7 +179,7 @@ namespace stapolizeiuster_carmanager.Controllers
 
                 SetTemplate(worksheet, isPlanning);
 
-                var allEntities = _planningsController.GetPlannedPlannings(starttime, endtime).Where(x => x.Car.Id == car.Id);
+                var allEntities = _planningsController.GetPlannedPlannings(statistic.StartDate, statistic.EndDate).Where(x => x.Car.Id == statistic.Car.Id);
 
                 var countPlannings = allEntities.Count();
 
@@ -215,13 +189,13 @@ namespace stapolizeiuster_carmanager.Controllers
 
                 worksheet.Cells[1, 1].Style.Font.Size = 18;
                 worksheet.Cells[1, 1].Style.Font.Bold = true;
-                worksheet.Cells[1, 1].Value = "Auswertung - " + car.Description + " " + car.Radio;
+                worksheet.Cells[1, 1].Value = "Auswertung - " + statistic.Car.Description + " " + statistic.Car.Radio;
                 worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Value = starttime.ToString("d") + " - " + endtime.ToString("d");
+                worksheet.Cells[2, 1].Value = statistic.StartDate.ToString("d") + " - " + statistic.EndDate.ToString("d");
                 worksheet.Cells[5, 1].Value = "Erstelldatum:";
                 worksheet.Cells[5, 2].Value = DateTime.Now.ToString("dd.MM.yyyy H:mm");
                 worksheet.Cells[6, 1].Value = "Ersteller:";
-                worksheet.Cells[6, 2].Value = "Marti, Luca";
+                worksheet.Cells[6, 2].Value = statistic.Creator;
 
                 //Second row
                 worksheet.Cells[8, 1].Style.Font.Bold = true;
@@ -297,12 +271,9 @@ namespace stapolizeiuster_carmanager.Controllers
         /// <summary>
         ///     Create the Excel-File with all devices
         /// </summary>
-        public FileInfo CreateOverviewSheet()
+        public FileInfo CreateOverviewSheet(DateTime startTime, DateTime endTime)
         {
             bool isPlanning = true;
-
-            DateTime starttime = DateTime.Now;
-            DateTime endtime = DateTime.Now.AddDays(2);
 
             var filename = "Planung_" + DateTime.Now.ToString("d") + ".xlsx";
 
@@ -314,7 +285,7 @@ namespace stapolizeiuster_carmanager.Controllers
 
                 SetTemplate(worksheet, isPlanning);
 
-                var allEntities = _planningsController.GetPlannedPlannings(starttime, endtime).OrderBy(x => x.StartTime);
+                var allEntities = _planningsController.GetPlannedPlannings(startTime, endTime).OrderBy(x => x.StartTime);
 
                 //Add the header informations
                 //First row
@@ -323,11 +294,11 @@ namespace stapolizeiuster_carmanager.Controllers
                 worksheet.Cells[1, 1].Style.Font.Bold = true;
                 worksheet.Cells[1, 1].Value = "Fahrzeugplanung";
                 worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Value = starttime.ToString("d") + " - " + endtime.ToString("d");
+                worksheet.Cells[2, 1].Value = startTime.ToString("dd.MM.yyyy HH:mm") + " - " + endTime.ToString("dd.MM.yyyy HH:mm");
                 worksheet.Cells[5, 1].Value = "Erstelldatum:";
                 worksheet.Cells[5, 2].Value = DateTime.Now.ToString("dd.MM.yyyy H:mm");
                 worksheet.Cells[6, 1].Value = "Ersteller:";
-                worksheet.Cells[6, 2].Value = "Marti, Luca";
+                worksheet.Cells[6, 2].Value = GetUserNamePrinicpals();
 
                 var col = 7;
 
@@ -343,8 +314,8 @@ namespace stapolizeiuster_carmanager.Controllers
                 foreach (var planning in allEntities)
                 {
                     col++;
-                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("d") + " " + planning.StartTime.ToString("t");
-                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("d") + " " + planning.EndTime.ToString("t");
+                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("dd.MM.yyyy") + " " + planning.StartTime.ToString("HH:mm");
+                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("dd.MM.yyyy") + " " + planning.EndTime.ToString("HH:mm");
                     worksheet.Cells[col, 3].Value = planning.Car.Description + " - " + planning.Car.Radio;
                     worksheet.Cells[col, 4].Value = planning.State.Name;
                 }
@@ -386,6 +357,16 @@ namespace stapolizeiuster_carmanager.Controllers
             }
 
             return response;
+        }
+
+        public void OnExportClicked(int? id)
+        {
+            var statistic = new Statistic();
+            if (id != null)
+            {
+                statistic = db.Statistics.Include(c => c.Car).Where(x => x.Id == id).SingleOrDefault();
+            }
+            CreateSingleCarSheet(statistic);
         }
 
     }
