@@ -62,6 +62,11 @@ namespace stapolizeiuster_carmanager.Controllers
                 else
                     return RedirectToAction("Index", new { message = "createConflict" });
 
+                TimeSpan startTimeSpan = new TimeSpan(0, 0, 0);
+                TimeSpan endTimeSpan = new TimeSpan(23, 59, 59);
+
+                statistic.StartDate = statistic.StartDate.Date + startTimeSpan;
+                statistic.EndDate = statistic.EndDate.Date + endTimeSpan;
 
                 db.Statistics.Add(statistic);
                 db.SaveChanges();
@@ -181,7 +186,7 @@ namespace stapolizeiuster_carmanager.Controllers
 
                 SetTemplate(worksheet, isPlanning);
 
-                var allEntities = _planningsController.GetPlannedPlannings(statistic.StartDate, statistic.EndDate).Where(x => x.Car.Id == statistic.Car.Id);
+                var allEntities = _planningsController.GetPlannedPlannings(statistic.StartDate, statistic.EndDate).Where(x => x.Car.Id == statistic.Car.Id).OrderByDescending(x => x.EndTime);
 
                 var countPlannings = allEntities.Count();
 
@@ -219,15 +224,15 @@ namespace stapolizeiuster_carmanager.Controllers
                 var tableHeader = col;
 
                 //Add the content-headers
-                worksheet.Cells[tableHeader, 1].Value = "Startzeit";
-                worksheet.Cells[tableHeader, 2].Value = "Endzeit";
+                worksheet.Cells[tableHeader, 1].Value = "Startdatum";
+                worksheet.Cells[tableHeader, 2].Value = "Enddatum";
                 worksheet.Cells[tableHeader, 3].Value = "Status";
 
                 foreach (var planning in allEntities)
                 {
                     col++;
-                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("d") + " " + planning.StartTime.ToString("t");
-                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("d") + " " + planning.EndTime.ToString("t");
+                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("dd.MM.yyyy");
+                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("dd.MM.yyyy");
                     worksheet.Cells[col, 3].Value = planning.State.Name;
                 }
 
@@ -287,7 +292,7 @@ namespace stapolizeiuster_carmanager.Controllers
 
                 SetTemplate(worksheet, isPlanning);
 
-                var allEntities = _planningsController.GetPlannedPlannings(startTime, endTime).OrderBy(x => x.StartTime);
+                var allEntities = _planningsController.GetPlannedPlannings(startTime, endTime).OrderByDescending(x => x.EndTime);
 
                 //Add the header informations
                 //First row
@@ -296,9 +301,9 @@ namespace stapolizeiuster_carmanager.Controllers
                 worksheet.Cells[1, 1].Style.Font.Bold = true;
                 worksheet.Cells[1, 1].Value = "Fahrzeugplanung";
                 worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Value = startTime.ToString("dd.MM.yyyy HH:mm") + " - " + endTime.ToString("dd.MM.yyyy HH:mm");
+                worksheet.Cells[2, 1].Value = startTime.ToString("dd.MM.yyyy") + " - " + endTime.ToString("dd.MM.yyyy");
                 worksheet.Cells[5, 1].Value = "Erstelldatum:";
-                worksheet.Cells[5, 2].Value = DateTime.Now.ToString("dd.MM.yyyy H:mm");
+                worksheet.Cells[5, 2].Value = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
                 worksheet.Cells[6, 1].Value = "Ersteller:";
                 worksheet.Cells[6, 2].Value = GetUserNamePrinicpals();
 
@@ -308,16 +313,16 @@ namespace stapolizeiuster_carmanager.Controllers
                 var tableHeader = col;
 
                 //Add the content-headers
-                worksheet.Cells[tableHeader, 1].Value = "Startzeit";
-                worksheet.Cells[tableHeader, 2].Value = "Endzeit";
+                worksheet.Cells[tableHeader, 1].Value = "Startdatum";
+                worksheet.Cells[tableHeader, 2].Value = "Enddatum";
                 worksheet.Cells[tableHeader, 3].Value = "Fahrzeug";
                 worksheet.Cells[tableHeader, 4].Value = "Status";
 
                 foreach (var planning in allEntities)
                 {
                     col++;
-                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("dd.MM.yyyy") + " " + planning.StartTime.ToString("HH:mm");
-                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("dd.MM.yyyy") + " " + planning.EndTime.ToString("HH:mm");
+                    worksheet.Cells[col, 1].Value = planning.StartTime.ToString("dd.MM.yyyy");
+                    worksheet.Cells[col, 2].Value = planning.EndTime.ToString("dd.MM.yyyy");
                     worksheet.Cells[col, 3].Value = planning.Car.Description + " - " + planning.Car.Radio;
                     worksheet.Cells[col, 4].Value = planning.State.Name;
                 }

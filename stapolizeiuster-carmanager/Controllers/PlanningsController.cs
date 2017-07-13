@@ -39,13 +39,7 @@ namespace stapolizeiuster_carmanager.Controllers
         public ActionResult Create(DateTime startTime, DateTime endTime)
         {
             ViewBag.Name = GetUserNamePrinicpals();
-            ViewBag.Cars =
-                new SelectList(
-                    db.Plannings.Where(
-                        x =>
-                            x.StartTime >= startTime && startTime >= x.EndTime ||
-                            x.StartTime >= endTime && endTime >= x.EndTime ||
-                            startTime >= x.StartTime && endTime <= x.EndTime).ToList(), "Car.Id", "Car.Radio");
+            ViewBag.Cars = new SelectList(db.Cars, "Car.Id", "Car.Radio");
 
             return View(new Planning {StartTime = startTime, EndTime = endTime});
         }
@@ -68,6 +62,12 @@ namespace stapolizeiuster_carmanager.Controllers
                     planning.State = db.States.SingleOrDefault(s => s.Id == planning.State.Id);
                 else
                     return RedirectToAction("Index", new {message = "createConflict"});
+
+                TimeSpan startTimeSpan = new TimeSpan(0, 0, 0);
+                TimeSpan endTimeSpan = new TimeSpan(23, 59, 59);
+
+                planning.StartTime = planning.StartTime.Date + startTimeSpan;
+                planning.EndTime = planning.EndTime.Date + endTimeSpan;
 
                 db.Plannings.Add(planning);
                 db.SaveChanges();
@@ -152,7 +152,7 @@ namespace stapolizeiuster_carmanager.Controllers
         public static IEnumerable<SelectListItem> FillCarsDropDown(DateTime startTime, DateTime endTime, Car car = null)
         {
             var list = new List<SelectListItem>();
-            var items = _carsController.GetAvailableCars(startTime, endTime, car);
+            var items = _carsController.Get();
 
             foreach (var item in items)
                 list.Add(new SelectListItem {Text = item.Description + " - " + item.Radio, Value = item.Id.ToString()});

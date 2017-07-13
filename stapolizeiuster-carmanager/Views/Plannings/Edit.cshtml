@@ -15,19 +15,19 @@
     <div class="form-horizontal">
 
         <div class="form-group">
-            @Html.LabelFor(model => model.StartTime, "Startzeit", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.StartTime, "Startdatum", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <p class="form-control-static">
-                    @Model.StartTime.ToString("d") @Model.StartTime.ToString("t")
+                    @Model.StartTime.ToString("d")
                     @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
                 </p>
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.EndTime, "Endzeit", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EndTime, "Enddatum", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <p class="form-control-static">
-                    @Model.EndTime.ToString("d") @Model.EndTime.ToString("t")
+                    @Model.EndTime.ToString("d")
                     @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
                 </p>
             </div>

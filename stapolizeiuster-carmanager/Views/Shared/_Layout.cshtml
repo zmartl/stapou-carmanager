@@ -76,7 +76,7 @@
 
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("/Scripts/moment-with-locales.min.js")
-    @Scripts.Render("/Scripts/bootstrap-datetimepicker.min.js")
+    @Scripts.Render("/Scripts/bootstrap-datetimepicker.js")
     @Scripts.Render("/Scripts/sweetalert2.min.js")
     @Scripts.Render("/Scripts/toastr.min.js")
     @Scripts.Render("/Scripts/messageHelper.js")
@@ -84,44 +84,48 @@
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker({
-                locale: 'de'
+        $(document).ready(function () {
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                    locale: 'de',
+                    format: 'L',
+                    defaultDate: new Date().toString("dd.MM.yyyy")
+                });
+                $("#datetimepicker1").on("dp.change", function (e) {
+                    $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+                });
             });
-            $("#datetimepicker1").datetimepicker("setDate", Date.now().toString());
-            console.log(Date.now().toString());
-            $("#datetimepicker1").on("dp.change", function (e) {
-                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    locale: 'de',
+                    format: 'L',
+                    useCurrent: true                    
+                });
+                $("#datetimepicker2").on("dp.change", function (e) {
+                    $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+                });
             });
-        });
-        $(function () {
-            $('#datetimepicker2').datetimepicker({
-                locale: 'de',
-                useCurrent: true,
-                defaultDate: new Date().toString("dd.MM.yyyy")
-            });
-            $("#datetimepicker2").on("dp.change", function (e) {
-                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
-            });
-        });
 
-        $(function () {
-            $('#datetimepicker3').datetimepicker({
-                locale: 'de'
+            $(function () {
+                $('#datetimepicker3').datetimepicker({
+                    locale: 'de',
+                    format: 'L',
+                    defaultDate: new Date().toString("dd.MM.yyyy")
 
+                });
+                $("#datetimepicker3").on("dp.change", function (e) {
+                    $('#datetimepicker4').data("DateTimePicker").minDate(e.date);
+                });
             });
-            $("#datetimepicker3").on("dp.change", function (e) {
-                $('#datetimepicker4').data("DateTimePicker").minDate(e.date);
-            });
-        });
-        $(function () {
-            $('#datetimepicker4').datetimepicker({
-                locale: 'de',
-                useCurrent: true,
-                defaultDate: new Date().toString("dd.MM.yyyy")
-            });
-            $("#datetimepicker4").on("dp.change", function (e) {
-                $('#datetimepicker3').data("DateTimePicker").maxDate(e.date);
+            $(function () {
+                $('#datetimepicker4').datetimepicker({
+                    locale: 'de',
+                    format: 'L',
+                    useCurrent: true
+                });
+                $("#datetimepicker4").on("dp.change", function (e) {
+                    $('#datetimepicker3').data("DateTimePicker").maxDate(e.date);
+                });
             });
         });
 
