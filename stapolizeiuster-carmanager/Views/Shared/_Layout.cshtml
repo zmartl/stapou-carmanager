@@ -17,6 +17,7 @@
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("/Scripts/moment-with-locales.min.js")
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -75,7 +76,6 @@
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("/Scripts/moment-with-locales.min.js")
     @Scripts.Render("/Scripts/bootstrap-datetimepicker.js")
     @Scripts.Render("/Scripts/sweetalert2.min.js")
     @Scripts.Render("/Scripts/toastr.min.js")
@@ -88,11 +88,11 @@
             $(function () {
                 $('#datetimepicker1').datetimepicker({
                     locale: 'de',
-                    format: 'L',
-                    defaultDate: new Date().toString("dd.MM.yyyy")
+                    format: 'L'
                 });
                 $("#datetimepicker1").on("dp.change", function (e) {
                     $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+                    $('#datetimepicker2').data("DateTimePicker").date(e.date);
                 });
             });
             $(function () {
@@ -109,8 +109,7 @@
             $(function () {
                 $('#datetimepicker3').datetimepicker({
                     locale: 'de',
-                    format: 'L',
-                    defaultDate: new Date().toString("dd.MM.yyyy")
+                    format: 'L'
 
                 });
                 $("#datetimepicker3").on("dp.change", function (e) {
@@ -132,9 +131,9 @@
     </script>
     <script src="https://cdn.auth0.com/js/lock/10.14/lock.min.js"></script>
     <script>
-  var lock = new Auth0Lock('Z3aZNItzApjz26Rj6iVGELOdQUS9qMkw', 'luca-marti.eu.auth0.com', {
+        var lock = new Auth0Lock('DaT2sz7ua8df4O8gHvFoAvBXUtOJf62y', 'luca-marti.eu.auth0.com', {
     auth: {
-        redirectUrl: 'http://stapou-car.azurewebsites.net/LoginCallback.ashx',
+        redirectUrl: 'http://stapouster-carmanager.azurewebsites.net/LoginCallback.ashx',
       responseType: 'code',
       params: {
         scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes

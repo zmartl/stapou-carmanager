@@ -96,6 +96,7 @@ namespace stapolizeiuster_carmanager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             var car = db.Cars.Find(id);
             db.Cars.Remove(car);
 

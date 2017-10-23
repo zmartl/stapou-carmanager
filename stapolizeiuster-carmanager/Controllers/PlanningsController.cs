@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -38,10 +39,18 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Create
         public ActionResult Create(DateTime startTime, DateTime endTime)
         {
-            ViewBag.Name = GetUserNamePrinicpals();
-            ViewBag.Cars = new SelectList(db.Cars, "Car.Id", "Car.Radio");
+            try
+            {
+                startTime = DateTime.Parse(startTime.ToLongDateString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
+                endTime = DateTime.Parse(endTime.ToLongDateString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
 
-            return View(new Planning {StartTime = startTime, EndTime = endTime});
+                ViewBag.Name = GetUserNamePrinicpals();
+                return View(new Planning { StartTime = startTime, EndTime = endTime });
+            }
+            catch (Exception e)
+            {
+                return Index();
+            }              
         }
 
         // POST: Plannings/Create
@@ -74,7 +83,7 @@ namespace stapolizeiuster_carmanager.Controllers
                 return RedirectToAction("Index", new {message = "createSuccess"});
             }
 
-            return View(planning);
+            return Index();
         }
 
         // GET: Plannings/Edit/5
@@ -109,7 +118,10 @@ namespace stapolizeiuster_carmanager.Controllers
                     return RedirectToAction("Index", new {message = "createConflict"});
 
                 db.Entry(planning).State = EntityState.Modified;
-                db.SaveChanges();
+
+                               
+                db.Plannings.AddOrUpdate(planning);
+                db.SaveChanges(); 
                 return RedirectToAction("Index", new {message = "editSuccess"});
             }
             return View(planning);
@@ -118,6 +130,7 @@ namespace stapolizeiuster_carmanager.Controllers
         // GET: Plannings/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.Name = GetUserNamePrinicpals();
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var planning = db.Plannings.Find(id);
@@ -149,7 +162,7 @@ namespace stapolizeiuster_carmanager.Controllers
         }
 
         //Get Data for DropDown
-        public static IEnumerable<SelectListItem> FillCarsDropDown(DateTime startTime, DateTime endTime, Car car = null)
+        public static IEnumerable<SelectListItem> FillCarsDropDown(Car car = null)
         {
             var list = new List<SelectListItem>();
             var items = _carsController.Get();
